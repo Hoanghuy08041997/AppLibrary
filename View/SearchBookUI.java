@@ -19,7 +19,7 @@ public class SearchBookUI extends JPanel {
     private JPanel bookDetailsPanelForManager;
     private JPanel createBookDetailsPanel;
 
-    public SearchBookUI(int IdCustomer) {
+    public SearchBookUI(int IdCustomer,String s) {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -76,7 +76,7 @@ public class SearchBookUI extends JPanel {
             int selectedRow = bookTable.getSelectedRow();
             if (selectedRow != -1) {                
                 int bookId = (int) bookTable.getValueAt(selectedRow, 0);
-                showBookDetails(bookId, IdCustomer);
+                showBookDetails(bookId, IdCustomer,s);
             }
         });
         constraints.gridx = 0;
@@ -99,7 +99,7 @@ public class SearchBookUI extends JPanel {
         }
 
         addButton.addActionListener(((ActionEvent e) -> {
-            
+            showTableToEdit(0, "add");
         }));
 
         constraints.gridx = 2; 
@@ -326,7 +326,7 @@ public class SearchBookUI extends JPanel {
 
         return bookPanel;
     }
-    private JPanel createBookDetailsPanelForManager(int idBook, int idCus) {
+    private JPanel createBookDetailsPanelForManager(int idBook, int idCus, String what) {
         JPanel bookPanel = new JPanel();
         bookPanel.setLayout(new BorderLayout());
 
@@ -348,24 +348,50 @@ public class SearchBookUI extends JPanel {
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
-        JButton lendButton = new JButton("Edit Information Book");
+        
+        JButton lendButton = new JButton("Lend Book");
         lendButton.addActionListener((ActionEvent e) -> {
-            showTableToEdit(idBook);
+            lendBook(idBook, idCus);
         });
         buttonPanel.add(lendButton);
 
-        JButton returnButton = new JButton("Delete Book");
+        // Thêm nút "Return Book"
+        JButton returnButton = new JButton("Return Book");
         returnButton.addActionListener((ActionEvent e) -> {
+            returnBook(idBook, idCus);
+        });
+        
+        buttonPanel.add(returnButton);
+        JButton editButton = new JButton("Edit Information Book");
+        editButton.addActionListener((ActionEvent e) -> {
+            showTableToEdit(idBook,"edit");
+        });
+        buttonPanel.add(editButton);
+
+        JButton deleteButton = new JButton("Delete Book");
+        deleteButton.addActionListener((ActionEvent e) -> {
             deleteBook(idBook);
         });
-        buttonPanel.add(returnButton);
+        buttonPanel.add(deleteButton);
+        
+        if ("search".equals(what)) {
+            lendButton.setEnabled(false);
+            returnButton.setEnabled(false);
+            lendButton.setToolTipText("This section does not support this feature.");
+            returnButton.setToolTipText("This section does not support this feature.");
+        } else {
+            lendButton.setEnabled(false);
+            returnButton.setEnabled(false);
+            lendButton.setToolTipText("This section does not support this feature.");
+            returnButton.setToolTipText("This section does not support this feature.");
+        }
 
         // Thêm panel chứa các nút vào bookPanel
         bookPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         return bookPanel;
     }
-    private JPanel createEditableBookDetailsPanel(int idBook) {
+    private JPanel createEditableBookDetailsPanel(int idBook,String s) {
         JPanel bookPanel = new JPanel();
         bookPanel.setLayout(new BorderLayout());        
         // Tạo bảng dữ liệu Excel cho thông tin sách
@@ -374,11 +400,17 @@ public class SearchBookUI extends JPanel {
 
         // Tìm kiếm sách với ID tương ứng và thêm vào bảng dữ liệu
         for (Book book : ManagementLibrary.book) {
-            if (book.getId() == idBook) {
+            if (book.getId() == idBook && "edit".equals(s)) {
                 Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), book.getNumber(), book.getPrice()};
                 tableModel.addRow(rowData);
-            }
+            }             
         }
+        
+        if ("add".equals(s)) {
+                Object[] rowData = {"", "", "", "", "", ""};
+                tableModel.addRow(rowData);
+            }     
+        
 
         JTable bookTable = new JTable(tableModel);
 
@@ -389,21 +421,46 @@ public class SearchBookUI extends JPanel {
         
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener((ActionEvent e) -> {
-            // Lấy các giá trị từ bảng và cập nhật cho đối tượng sách tương ứng
             int selectedRow = bookTable.getSelectedRow();
             if (selectedRow != -1) {
-                
                 Object id = bookTable.getValueAt(selectedRow, 0);
-                int bookId = Integer.parseInt(id.toString());
+                int bookId = Integer.parseInt(id.toString());               
                 String name = bookTable.getValueAt(selectedRow, 1).toString();
                 String author = bookTable.getValueAt(selectedRow, 2).toString();
                 String type = bookTable.getValueAt(selectedRow, 3).toString();
                 int totalBook = Integer.parseInt(bookTable.getValueAt(selectedRow, 4).toString());
                 int price = Integer.parseInt(bookTable.getValueAt(selectedRow, 5).toString());
+
+                // Kiểm tra xem ID đã tồn tại hay chưa
+                if (ValidateForSwing.isDuplicateIdBook(ManagementLibrary.book,bookId)) {
+                    JOptionPane.showMessageDialog(null, "Id is not vaild or have in database.");
+                    return;
+                }
+
+                // Kiểm tra tính hợp lệ của tên sách
+                if (!ValidateForSwing.isName(name)) {
+                    JOptionPane.showMessageDialog(null, "Name of the book is not valid.");
+                    return;
+                }
+                if (!ValidateForSwing.isName(author)) {
+                    JOptionPane.showMessageDialog(null, "Author is not valid.");
+                    return;
+                }
+                if (!ValidateForSwing.isName(type)) {
+                    JOptionPane.showMessageDialog(null, "Type is not valid.");
+                    return;
+                }
+
                 Book b = new Book(bookId, name, author, type, totalBook, price); 
-                editBook(bookId, b);
-            }                       
+                if ("edit".equals(s)) {
+                    editBook(bookId, b);
+                } else {
+                    addBook(b);
+                }
+            }
         });
+
+                   
         buttonPanel.add(saveButton);
 
         // Thêm panel chứa nút vào bookPanel
@@ -412,9 +469,9 @@ public class SearchBookUI extends JPanel {
     }
     
     //Create Panels
-    private void showBookDetails(int idBook, int idCus) {
+    private void showBookDetails(int idBook, int idCus, String s) {
         bookDetailsPanel = createBookDetailsPanel(idBook, idCus);
-        bookDetailsPanelForManager = createBookDetailsPanelForManager(idBook, idCus);
+        bookDetailsPanelForManager = createBookDetailsPanelForManager(idBook, idCus, s);
         JDialog dialog = new JDialog();
         dialog.setModal(true); 
         dialog.setSize(800, 400);
@@ -426,8 +483,8 @@ public class SearchBookUI extends JPanel {
         dialog.dispose();
         
     }   
-    private void showTableToEdit(int idBook) {
-        createBookDetailsPanel = createEditableBookDetailsPanel(idBook);
+    private void showTableToEdit(int idBook,String s) {
+        createBookDetailsPanel = createEditableBookDetailsPanel(idBook,s);
         JDialog dialog = new JDialog();
         dialog.setModal(true);
         dialog.setSize(800, 400);
@@ -435,7 +492,7 @@ public class SearchBookUI extends JPanel {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }  
-    public static JPanel createPanel(int idCustomer) {
-        return new SearchBookUI(idCustomer);
+    public static JPanel createPanel(int idCustomer,String s) {
+        return new SearchBookUI(idCustomer,s);
     }  
 }

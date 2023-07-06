@@ -30,7 +30,7 @@ public class ManagerMenuUI extends JFrame {
         accountManagementUI = new AccountManagementUI();
         createAccountUI = new CreateAccountUI();
         searchCustomerUI = new SearchCustomerUI();
-        searchBookUI = new SearchBookUI(0);
+        searchBookUI = new SearchBookUI(0,"search");
     }
 
     private void initializeUI() {

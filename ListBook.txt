@@ -8,3 +8,4 @@
 8,PHP for Beginners,Peter,Manga,2,160000
 9,Android Development,Amy,Manga,7,300000
 10,Swift Programming,Steve,Manga,4,230000
+12,Modern Operating System,Andrew,IT,6,400000

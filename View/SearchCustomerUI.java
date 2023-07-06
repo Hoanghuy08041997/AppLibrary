@@ -217,21 +217,24 @@ public class SearchCustomerUI extends JPanel {
 
     // Method to lend book for selected account
     private void lendBook(int idCustomer) {
-        JPanel searchPanel = SearchBookUI.createPanel(idCustomer);
+        JPanel searchPanel = SearchBookUI.createPanel(idCustomer,"lend");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(searchPanel);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true); 
     }
+
     
     // Method to return book for selected account
     private void returnBook(int idCustomer) {
-        JPanel searchPanel = SearchBookUI.createPanel(idCustomer);
+        JPanel searchPanel = SearchBookUI.createPanel(idCustomer,"return");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(searchPanel);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true); 
     }
     

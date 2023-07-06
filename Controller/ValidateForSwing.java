@@ -1,11 +1,13 @@
 package Controller;
 
+import Model.Book;
 import Model.Customer;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -34,7 +36,11 @@ public class ValidateForSwing {
         }
 
         return false; // No duplicate username found
-    }    
+    }   
+    public static boolean isName(String name) {
+        return !name.startsWith(" ") && name.matches("[A-Za-z]+( [A-Za-z]+)*") && !name.isEmpty();
+    }
+
     
     //Password
     public static String getPasswordInput(JPasswordField passwordField) {
@@ -240,4 +246,11 @@ public class ValidateForSwing {
         return LocalDate.parse(input, formatter);
     }
     
+    public static boolean isDuplicateIdBook(ArrayList<Book> arrayList, int i) {
+        for (Book element : arrayList) {
+            if (element.getId() == i)
+                return true;
+        }
+        return false; 
+    }
 }

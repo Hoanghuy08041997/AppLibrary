@@ -89,7 +89,7 @@ public final class CustomerMenuUI extends JFrame {
         searchBookButton = new JButton("2. Search Book");
         searchBookButton.addActionListener((ActionEvent e) -> {
             contentPanel.removeAll();
-            contentPanel.add(new SearchBookUI(ManagementLibrary.logged.get(0).getId()));
+            contentPanel.add(new SearchBookUI(ManagementLibrary.logged.get(0).getId(),"search"));
             contentPanel.revalidate();
             contentPanel.repaint();
         });
