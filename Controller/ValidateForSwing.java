@@ -246,9 +246,9 @@ public class ValidateForSwing {
         return LocalDate.parse(input, formatter);
     }
     
-    public static boolean isDuplicateIdBook(ArrayList<Book> arrayList, int i) {
+    public static boolean isDuplicateIdBook(ArrayList<Book> arrayList, int i, String name) {
         for (Book element : arrayList) {
-            if (element.getId() == i)
+            if (element.getId() == i && !element.getName().equals(name))
                 return true;
         }
         return false; 

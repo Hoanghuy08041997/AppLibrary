@@ -50,7 +50,7 @@ public class SearchBookUI extends JPanel {
         searchButton.addActionListener((ActionEvent e) -> {
             String searchCriteria = searchField.getText();
             String selectedProperty = (String) searchProperties.getSelectedItem();
-            if ("lend".equals(s)){
+            if ("lend".equals(s) || "search".equals(s)){
                 List<Integer> searchResults = performSearchBook(selectedProperty, searchCriteria);
                 updateBookList(searchResults);
             }
@@ -379,6 +379,9 @@ public class SearchBookUI extends JPanel {
             case "return":
                 columnNames = new String[]{"ID", "Name", "Author", "Type", "Id Customer", "Price", "Date Borrow", "Status"};
                 break;
+            case "search" :
+                columnNames = new String[]{"ID", "Name", "Author", "Type", "Total Book", "Price"};
+                break;
             default:
                 return bookPanel; // Return an empty panel if 'what' is neither "lend" nor "return"
         }
@@ -386,7 +389,7 @@ public class SearchBookUI extends JPanel {
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         tableModel.setRowCount(0);
 
-        if ("lend".equals(what)){
+        if ("lend".equals(what) || "search".equals(what)){
             for (Book book : ManagementLibrary.book) {
                 if (book.getId() == idBook) {
                     Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), MethodController.remainingBookToBorrow("id", Integer.toString(idBook)), book.getPrice()};
@@ -437,7 +440,7 @@ public class SearchBookUI extends JPanel {
         });
         buttonPanel.add(deleteButton);
         
-        if ("edit".equals(what)) {
+        if ("edit".equals(what) || "search".equals(what)) {
             lendButton.setEnabled(false);
             returnButton.setEnabled(false);
             lendButton.setToolTipText("This section does not support this feature.");
@@ -508,7 +511,7 @@ public class SearchBookUI extends JPanel {
                 int price = Integer.parseInt(bookTable.getValueAt(selectedRow, 5).toString());
 
                 // Kiểm tra xem ID đã tồn tại hay chưa
-                if (ValidateForSwing.isDuplicateIdBook(ManagementLibrary.book,bookId)) {
+                if (ValidateForSwing.isDuplicateIdBook(ManagementLibrary.book,bookId,name)) {
                     JOptionPane.showMessageDialog(null, "Id is not vaild or have in database.");
                     return;
                 }
