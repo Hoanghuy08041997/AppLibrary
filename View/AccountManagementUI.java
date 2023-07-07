@@ -21,7 +21,7 @@ public class AccountManagementUI extends JPanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         // Search properties
-        String[] options = {"name", "email", "phone"};
+        String[] options = {"id","name", "email", "phone"};
 
         searchProperties = new JComboBox<>(options);
         searchProperties.setPreferredSize(new Dimension(100, 25));
