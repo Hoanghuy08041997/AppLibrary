@@ -370,8 +370,7 @@ public class SearchBookUI extends JPanel {
     }
     private JPanel createBookDetailsPanelForManager(int idBook, int idCus, String what) {
         JPanel bookPanel = new JPanel();
-        bookPanel.setLayout(new BorderLayout());
-
+        bookPanel.setLayout(new BorderLayout());     
         String[] columnNames;
         switch (what) {
             case "lend":
@@ -390,7 +389,7 @@ public class SearchBookUI extends JPanel {
         if ("lend".equals(what)){
             for (Book book : ManagementLibrary.book) {
                 if (book.getId() == idBook) {
-                    Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), book.getNumber(), book.getPrice()};
+                    Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), MethodController.remainingBookToBorrow("id", Integer.toString(idBook)), book.getPrice()};
                     tableModel.addRow(rowData);
                 }
             }
@@ -550,6 +549,7 @@ public class SearchBookUI extends JPanel {
         bookDetailsPanel = createBookDetailsPanel(idBook, idCus);
         bookDetailsPanelForManager = createBookDetailsPanelForManager(idBook, idCus, s);
         JDialog dialog = new JDialog();
+        dialog.setTitle("Check your book");
         dialog.setModal(true); 
         dialog.setSize(800, 400);
         if (ManagementLibrary.logged.get(0).getLevelUser() == 1){

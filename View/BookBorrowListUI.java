@@ -61,16 +61,34 @@ public class BookBorrowListUI extends JPanel {
         JButton returnButton = new JButton("Return Book");
         returnButton.addActionListener((ActionEvent e) -> {
             int selectedRow = bookTable.getSelectedRow();
-            if (selectedRow != -1) {
-                int accountId = (int) bookTable.getValueAt(selectedRow, 7);
-                int bookId = (int) bookTable.getValueAt(selectedRow, 0);
-                SearchBookUI.returnBook(bookId,accountId);
+            if (selectedRow != -1) {          
+                switch (ManagementLibrary.logged.get(0).getLevelUser()){
+                    case 1:
+                        int accountId = ManagementLibrary.logged.get(0).getId();
+                        int bookId = (int) bookTable.getValueAt(selectedRow, 0);
+                        SearchBookUI.returnBook(bookId,accountId);
+                        break;
+                    case 2:{
+                        accountId = (int) bookTable.getValueAt(selectedRow, 7);
+                        bookId = (int) bookTable.getValueAt(selectedRow, 0);
+                        SearchBookUI.returnBook(bookId,accountId);
+                        break;                 
+                    }
+                        
+                }
             }
+            
+            
         });
         buttonPanel.add(returnButton);
 
         // Tạo nút Search BorrowBook
         JButton searchButton = new JButton("Search BorrowBook");
+        if (ManagementLibrary.logged.get(0).getLevelUser() == 1){
+            searchButton.setEnabled(false);
+            searchButton.setToolTipText("You don't have premission");
+        }
+    
         searchButton.addActionListener((ActionEvent e)-> {
             JOptionPane.showMessageDialog(null, "Return to Search Customer to do it easy." );
         });
