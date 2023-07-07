@@ -20,6 +20,7 @@ public class SearchBookUI extends JPanel {
     private JPanel createBookDetailsPanel;
 
     public SearchBookUI(int IdCustomer,String s) {
+        
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -49,8 +50,14 @@ public class SearchBookUI extends JPanel {
         searchButton.addActionListener((ActionEvent e) -> {
             String searchCriteria = searchField.getText();
             String selectedProperty = (String) searchProperties.getSelectedItem();
-            List<Integer> searchResults = performSearch(selectedProperty, searchCriteria);
-            updateBookList(searchResults);
+            if ("lend".equals(s)){
+                List<Integer> searchResults = performSearchBook(selectedProperty, searchCriteria);
+                updateBookList(searchResults);
+            }
+            if ("return".equals(s)) {
+                List<Integer> searchResults = performSearchBookBorrow(selectedProperty, searchCriteria);
+                updateBookBorrowList(searchResults);
+            }
         });
         constraints.gridx = 2;
         constraints.gridy = 0;
@@ -116,30 +123,33 @@ public class SearchBookUI extends JPanel {
     }
 
     // Method to perform search based on given criteria
-    private List<Integer> performSearch(String searchCriteria, String searchProperty) {
+    private List<Integer> performSearchBook(String searchCriteria, String searchProperty) {
         List<Integer> matchingBooks = MethodController.searchBook(searchCriteria, searchProperty);
+        return matchingBooks;
+    }
+    
+    private List<Integer> performSearchBookBorrow(String searchCriteria, String searchProperty) {
+        List<Integer> matchingBooks = MethodController.searchBookBorrow (searchCriteria, searchProperty);
         return matchingBooks;
     }
 
     // Method to update the book list with search results as a table
     private void updateBookList(List<Integer> searchResults) {
-        String[] columnNames = {"ID", "Name", "Author", "Type", "Total Book", "Price"};
-        Object[][] data = new Object[searchResults.size()][6];
-
-        for (int i = 0; i < searchResults.size(); i++) {
-            int bookIndex = searchResults.get(i);
-            for (Book book : ManagementLibrary.book) {
-                if ( book.getId() == bookIndex ) {
-                    data[i][0] = book.getId();       // ID
-                    data[i][1] = book.getName();     // Name
-                    data[i][2] = book.getAuthor();   // Author
-                    data[i][3] = book.getType();     // Type
-                    data[i][4] = book.getNumber();   // Total Book
-                    data[i][5] = book.getPrice();    // Price
+            String [] columnNames = {"ID", "Name", "Author", "Type", "Total Book", "Price"};
+            Object[][] data = new Object[searchResults.size()][6];
+            for (int i = 0; i < searchResults.size(); i++) {
+                int bookIndex = searchResults.get(i);
+                for (Book book : ManagementLibrary.book) {
+                    if ( book.getId() == bookIndex ) {
+                        data[i][0] = book.getId();       // ID
+                        data[i][1] = book.getName();     // Name
+                        data[i][2] = book.getAuthor();   // Author
+                        data[i][3] = book.getType();     // Type
+                        data[i][4] = book.getNumber();   // Total Book
+                        data[i][5] = book.getPrice();    // Price
+                    }
                 }
             }
-        }
-
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
         bookTable.setModel(tableModel);
         
@@ -150,9 +160,41 @@ public class SearchBookUI extends JPanel {
         columnModel.getColumn(3).setPreferredWidth(100);   // Type column width
         columnModel.getColumn(4).setPreferredWidth(50);   // Total Book column width
         columnModel.getColumn(5).setPreferredWidth(50);   // Price column width
-        
+         
     }
+    
+    private void updateBookBorrowList(List<Integer> searchResults){
+                String [] columnNames = {"ID", "Name", "Author", "Type", "Id Customer", "Price", "Date borrow", "Status"};
+                Object[][] data = new Object[searchResults.size()][8];
+                for (int i = 0; i < searchResults.size(); i++) {
+                    int bookIndex = searchResults.get(i);
+                    for (BookBorrow book : ManagementLibrary.bookBorrow) {
+                        if ( book.getId() == bookIndex ) {
+                            data[i][0] = book.getId();       // ID
+                            data[i][1] = book.getName();     // Name
+                            data[i][2] = book.getAuthor();   // Author
+                            data[i][3] = book.getType();     // Type
+                            data[i][4] = book.getNumber();   // Total Book
+                            data[i][5] = book.getPrice();    // Price
+                            data[i][6] = book.getDateBorrow(); //Date borrow                      
+                            data[i][7] = book.getStatus(); //Status
+                        }
+                    }
+                }
 
+                DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+                bookTable.setModel(tableModel);
+
+                TableColumnModel columnModel = bookTable.getColumnModel();
+                columnModel.getColumn(0).setPreferredWidth(20);    // ID column width
+                columnModel.getColumn(1).setPreferredWidth(300);   // Name column width
+                columnModel.getColumn(2).setPreferredWidth(100);   // Author column width
+                columnModel.getColumn(3).setPreferredWidth(100);   // Type column width
+                columnModel.getColumn(4).setPreferredWidth(50);   // Total Book column width
+                columnModel.getColumn(5).setPreferredWidth(50);   // Price column width
+                columnModel.getColumn(6).setPreferredWidth(50);   // Date borrow
+                columnModel.getColumn(7).setPreferredWidth(50);   // Status    
+    }
     // Method to return the selected book ID
     public void lendBook(int bookId, int idCustomer) {
         int confirmed = JOptionPane.showConfirmDialog(
@@ -181,7 +223,7 @@ public class SearchBookUI extends JPanel {
             }
         }
     }     
-    public void returnBook(int bookId, int idCustomer) {
+    public static void returnBook(int bookId, int idCustomer) {
         int confirmed = JOptionPane.showConfirmDialog(
             null,
             "Are you sure you want to return this book?",
@@ -330,14 +372,36 @@ public class SearchBookUI extends JPanel {
         JPanel bookPanel = new JPanel();
         bookPanel.setLayout(new BorderLayout());
 
-        // Tạo bảng dữ liệu Excel cho thông tin sách
-        String[] columnNames = {"ID", "Name", "Author", "Type", "Total Book", "Price"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        String[] columnNames;
+        switch (what) {
+            case "lend":
+                columnNames = new String[]{"ID", "Name", "Author", "Type", "Total Book", "Price"};
+                break;
+            case "return":
+                columnNames = new String[]{"ID", "Name", "Author", "Type", "Id Customer", "Price", "Date Borrow", "Status"};
+                break;
+            default:
+                return bookPanel; // Return an empty panel if 'what' is neither "lend" nor "return"
+        }
 
-        for (Book book : ManagementLibrary.book) {
-            if (book.getId() == idBook) {
-                Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), book.getNumber(), book.getPrice()};
-                tableModel.addRow(rowData);
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel.setRowCount(0);
+
+        if ("lend".equals(what)){
+            for (Book book : ManagementLibrary.book) {
+                if (book.getId() == idBook) {
+                    Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), book.getNumber(), book.getPrice()};
+                    tableModel.addRow(rowData);
+                }
+            }
+        }
+
+        if ("return".equals(what)) {
+            for (BookBorrow book : ManagementLibrary.bookBorrow) {
+                if (book.getId() == idBook && book.getIdCustomer() == idCus) {
+                    Object[] rowData = {book.getId(), book.getName(), book.getAuthor(), book.getType(), book.getIdCustomer(), book.getPrice(), book.getDateBorrow(), book.getStatus()};
+                    tableModel.addRow(rowData);
+                }
             }
         }
 
@@ -374,17 +438,30 @@ public class SearchBookUI extends JPanel {
         });
         buttonPanel.add(deleteButton);
         
-        if ("search".equals(what)) {
+        if ("edit".equals(what)) {
             lendButton.setEnabled(false);
             returnButton.setEnabled(false);
             lendButton.setToolTipText("This section does not support this feature.");
             returnButton.setToolTipText("This section does not support this feature.");
-        } else {
-            lendButton.setEnabled(false);
+        } 
+        if ("lend".equals(what) ) {
             returnButton.setEnabled(false);
-            lendButton.setToolTipText("This section does not support this feature.");
+            editButton.setEnabled(false);   
+            deleteButton.setEnabled(false);
             returnButton.setToolTipText("This section does not support this feature.");
+            editButton.setToolTipText("This section does not support this feature.");
+            deleteButton.setToolTipText("This section does not support this feature.");
         }
+        
+        if ("return".equals(what) ) {
+            lendButton.setEnabled(false);
+            editButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            lendButton.setToolTipText("This section does not support this feature.");
+            editButton.setToolTipText("This section does not support this feature.");
+            deleteButton.setToolTipText("This section does not support this feature.");
+        }
+        
 
         // Thêm panel chứa các nút vào bookPanel
         bookPanel.add(buttonPanel, BorderLayout.SOUTH);

@@ -22,8 +22,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class SearchCustomerUI extends JPanel {
     private final JButton removeAccountButton;
-    private final JButton lendBookButton; // New button
-    private final JButton returnBookButton; // New button
+    private final JButton lendBookButton; 
+    private final JButton returnBookButton; 
     private JTextField searchField;
     private JComboBox<String> searchProperties;
     private final JTable accountTable;
@@ -33,7 +33,7 @@ public class SearchCustomerUI extends JPanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         // Search properties
-        String[] options = {"name", "email", "phone"};
+        String[] options = {"id", "name", "email", "phone"};
 
         searchProperties = new JComboBox<>(options);
         searchProperties.setPreferredSize(new Dimension(100, 25));
@@ -219,14 +219,14 @@ public class SearchCustomerUI extends JPanel {
     private void lendBook(int idCustomer) {
         JPanel searchPanel = SearchBookUI.createPanel(idCustomer,"lend");
         JFrame frame = new JFrame();
+        frame.setTitle("Search Book");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(searchPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true); 
     }
-
-    
+   
     // Method to return book for selected account
     private void returnBook(int idCustomer) {
         JPanel searchPanel = SearchBookUI.createPanel(idCustomer,"return");

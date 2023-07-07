@@ -69,5 +69,16 @@ public class MethodController {
         }
         return matchingAccounts;
     }
+    
+    public static List<Integer> searchBookBorrow(String searchCriteria, String s) {
+        List<Integer> matchingAccounts = new ArrayList<>();
+        SearchPredicate<BookBorrow> searchCriteriaByProperties = new SearchPredicate<>(searchCriteria, s);
+        for (BookBorrow b : ManagementLibrary.bookBorrow) {
+            if (searchCriteriaByProperties.test(b)) {
+                matchingAccounts.add(b.getId());
+            }
+        }
+        return matchingAccounts;
+    }
 
 }

@@ -15,6 +15,7 @@ public class ManagerMenuUI extends JFrame {
     private JButton searchCustomerButton;
     private JButton addAccountButton;
     private JButton removeAccountButton;
+    private JButton listLendBookButton;
     private JButton exitButton;
 
     private final AccountManagementUI accountManagementUI;
@@ -104,8 +105,19 @@ public class ManagerMenuUI extends JFrame {
         });
         functionPanel.add(removeAccountButton);
 
+        // Nút "Remove account"
+        listLendBookButton = new JButton("7. List Lend Book");
+        listLendBookButton.addActionListener((ActionEvent e) -> {
+            contentPanel.removeAll();
+            contentPanel.add(new BookBorrowListUI(ManagementLibrary.bookBorrow));
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+        functionPanel.add(listLendBookButton);
+        
+        
         // Nút "Exit"
-        exitButton = new JButton("7. Exit");
+        exitButton = new JButton("8. Exit");
         exitButton.addActionListener((ActionEvent e) -> {
             MethodController.exit();
         });
@@ -147,6 +159,19 @@ public class ManagerMenuUI extends JFrame {
         });
         loginInfoPanel.add(loginInfoButton);
         mainPanel.add(loginInfoPanel, BorderLayout.NORTH);
+        mainPanel.add(splitPane, BorderLayout.CENTER);
+        
+        // Create a new JPanel for the version label
+        JPanel versionPanel = new JPanel();
+        versionPanel.setLayout(new BorderLayout());
+
+        JLabel versionLabel = new JLabel("Version 1.0 ");
+        versionLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        versionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        versionPanel.add(versionLabel, BorderLayout.EAST);
+
+        mainPanel.add(versionPanel, BorderLayout.SOUTH);
+        // Add the splitPane to the center of the mainPanel
         mainPanel.add(splitPane, BorderLayout.CENTER);
 
         setContentPane(mainPanel);
