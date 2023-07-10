@@ -253,7 +253,6 @@ public class SearchBookUI extends JPanel {
         }
     }
   
-    
     //Method about Book
     public void addBook(Book b){
         int confirmed = JOptionPane.showConfirmDialog(
@@ -317,8 +316,7 @@ public class SearchBookUI extends JPanel {
 
             if (location != 0) { 
                 ManagementLibrary.book.remove(location);
-                JOptionPane.showMessageDialog(this, "Delete successful."); // Hiển thị thông báo mượn thành công
-                ((Window) SwingUtilities.getRoot(this)).dispose();
+                JOptionPane.showMessageDialog(this, "Delete successful.");           
             } else {
                 JOptionPane.showMessageDialog(this, "Don't have this book.");
             }
