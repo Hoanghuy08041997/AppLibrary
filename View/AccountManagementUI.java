@@ -3,7 +3,6 @@ package View;
 import Controller.ManagementLibrary;
 import Controller.MethodController;
 import Model.Account;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -40,6 +39,7 @@ public class AccountManagementUI extends JPanel {
 
         // Search button
         JButton searchButton = new JButton("Search");
+        searchButton.setToolTipText("Search button.");
         searchButton.addActionListener((ActionEvent e) -> {
             String searchCriteria = searchField.getText();
             String selectedProperty = (String) searchProperties.getSelectedItem();
@@ -62,6 +62,7 @@ public class AccountManagementUI extends JPanel {
 
         // Remove account button
         removeAccountButton = new JButton("Remove account");
+        removeAccountButton.setToolTipText("Remove Account and Info Customer.");
         removeAccountButton.addActionListener((ActionEvent e) -> {
             int selectedRow = accountTable.getSelectedRow();
             if (selectedRow != -1) {

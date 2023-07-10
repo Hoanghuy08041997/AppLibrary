@@ -6,6 +6,8 @@ import Model.Account;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LoginSwingUI extends JFrame {
     private final JTextField usernameTextField;
@@ -19,6 +21,15 @@ public class LoginSwingUI extends JFrame {
         setTitle("Login");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                MethodController.exit();
+                JOptionPane.showMessageDialog(null, "Saved!");
+            }
+        });
+        
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
@@ -26,13 +37,18 @@ public class LoginSwingUI extends JFrame {
 
         JLabel usernameLabel = new JLabel("Username: ");
         usernameTextField = new JTextField();
+        usernameTextField.setToolTipText("Your username");
 
         JLabel passwordLabel = new JLabel("Password: ");
         passwordField = new JPasswordField();
+        passwordField.setToolTipText("Password must be at least 8 characters long and contain at least one digit, one letter, and one special character.");
 
         loginButton = new JButton("Login Account");
+        loginButton.setToolTipText("Login your Account");
         createAccountButton = new JButton("Create Account");
+        createAccountButton.setToolTipText("Create new Account");
         exitButton = new JButton("Exit");
+        exitButton.setToolTipText("Exit program");
 
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameTextField);
@@ -72,7 +88,7 @@ public class LoginSwingUI extends JFrame {
 
         createAccountButton.addActionListener((ActionEvent e) -> {
             CreateAccountUI createAccountUI = new CreateAccountUI();
-            
+            createAccountButton.setToolTipText("Create new Account");
             String us = usernameTextField.getText();
             String pd = new String(passwordField.getPassword());
             boolean validUsername = ValidateForSwing.isValidUsername(us);

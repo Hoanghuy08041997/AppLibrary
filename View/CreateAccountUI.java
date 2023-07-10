@@ -25,13 +25,14 @@ public class CreateAccountUI extends JPanel {
 
         JLabel usernameLabel = new JLabel("Username: ");
         usernameTextField = new JTextField();
-
+        usernameLabel.setToolTipText("Username");
         JLabel passwordLabel = new JLabel("Password: ");
         passwordField = new JPasswordField();
-
+        passwordField.setToolTipText("Password must be at least 8 characters long and contain at least one digit, one letter, and one special character.");
         createAccountButton = new JButton("Create Account");
+        createAccountButton.setToolTipText("Create new Account with lv1.");
         saveButton = new JButton("Save Data");
-
+        saveButton.setToolTipText("Save Data to Server.");
         add(usernameLabel);
         add(usernameTextField);
         add(passwordLabel);
@@ -106,7 +107,7 @@ public class CreateAccountUI extends JPanel {
                     if (phone.isEmpty()) {
                         int option = JOptionPane.showConfirmDialog(null, "Do you want to cancel creating an account?", "Confirmation", JOptionPane.YES_NO_OPTION);
                         if (option == JOptionPane.YES_OPTION) {
-                            isCancelled = true; // Đặt cờ nếu người dùng chọn Cancel
+                            isCancelled = true; 
                         }
                     }
                 }
@@ -118,7 +119,7 @@ public class CreateAccountUI extends JPanel {
                     if (birthday == null) {
                         int option = JOptionPane.showConfirmDialog(null, "Do you want to cancel creating an account?", "Confirmation", JOptionPane.YES_NO_OPTION);
                         if (option == JOptionPane.YES_OPTION) {
-                            isCancelled = true; // Đặt cờ nếu người dùng chọn Cancel
+                            isCancelled = true; 
                         }
                     }
                 }

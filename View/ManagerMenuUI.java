@@ -4,6 +4,8 @@ import Controller.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ManagerMenuUI extends JFrame {
     private JSplitPane splitPane;
@@ -25,13 +27,19 @@ public class ManagerMenuUI extends JFrame {
 
     public ManagerMenuUI() {
         setTitle("Manager Menu");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);            
         setPreferredSize(new Dimension(1000, 750));
         run();
         accountManagementUI = new AccountManagementUI();
         createAccountUI = new CreateAccountUI();
         searchCustomerUI = new SearchCustomerUI();
         searchBookUI = new SearchBookUI(0,"search");
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                MethodController.exit();
+            }
+        });
     }
 
     private void initializeUI() {
@@ -54,16 +62,18 @@ public class ManagerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        listBooksButton.setToolTipText("List all of books in library.");
         functionPanel.add(listBooksButton);
 
         // Nút "List all customers"
         listCustomersButton = new JButton("2. List all customers");
-        listCustomersButton.addActionListener((ActionEvent e) -> {
+        listCustomersButton.addActionListener((ActionEvent e) -> {       
             contentPanel.removeAll();
             contentPanel.add(new CustomerListUI(ManagementLibrary.customer));
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        listCustomersButton.setToolTipText("List all customers in the library.");        
         functionPanel.add(listCustomersButton);
 
         searchBookButton = new JButton("3. Search book");
@@ -73,6 +83,7 @@ public class ManagerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        searchBookButton.setToolTipText("Search book for Lend - Return - Edit - Remove or Add new Book");
         functionPanel.add(searchBookButton);
 
         // Nút "Search customer"
@@ -83,6 +94,7 @@ public class ManagerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        searchCustomerButton.setToolTipText("Search customer for Lend - Return - Remove Account");
         functionPanel.add(searchCustomerButton);
 
         // Nút "Add account"
@@ -93,6 +105,7 @@ public class ManagerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        addAccountButton.setToolTipText("Add new Account Customer");
         functionPanel.add(addAccountButton);
 
         // Nút "Remove account"
@@ -103,6 +116,7 @@ public class ManagerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        removeAccountButton.setToolTipText("Remove Account Customer");
         functionPanel.add(removeAccountButton);
 
         // Nút "Remove account"
@@ -113,6 +127,7 @@ public class ManagerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        listLendBookButton.setToolTipText("List Lend Book of Customer");
         functionPanel.add(listLendBookButton);
         
         
@@ -121,6 +136,7 @@ public class ManagerMenuUI extends JFrame {
         exitButton.addActionListener((ActionEvent e) -> {
             MethodController.exit();
         });
+        exitButton.setToolTipText("Exit program");
         functionPanel.add(exitButton);
 
         splitPane.setRightComponent(new JScrollPane(contentPanel));
@@ -136,6 +152,7 @@ public class ManagerMenuUI extends JFrame {
             showNameAccount.setEnabled(false);
             showNameAccount.addActionListener((ActionEvent event) -> {
             });
+            showNameAccount.setToolTipText("Your account logged.");
             popupMenu.add(showNameAccount);
 
             // Sự lựa chọn "Show info"
@@ -144,6 +161,7 @@ public class ManagerMenuUI extends JFrame {
                 LoginInfoUI loginInfoUI = new LoginInfoUI();
                 loginInfoUI.showInfo();
             });
+            showInfoItem.setToolTipText("Show your Account information.");
             popupMenu.add(showInfoItem);
 
             // Sự lựa chọn "Log out"
@@ -153,6 +171,7 @@ public class ManagerMenuUI extends JFrame {
                 loginInfoUI.logout();
                 JOptionPane.showMessageDialog(this, "Logged out successfully!");
             });
+            logoutItem.setToolTipText("Log out your Account.");
             popupMenu.add(logoutItem);
 
             popupMenu.show(loginInfoButton, 0, loginInfoButton.getHeight());
@@ -166,6 +185,7 @@ public class ManagerMenuUI extends JFrame {
         versionPanel.setLayout(new BorderLayout());
 
         JLabel versionLabel = new JLabel("Version 1.0 ");
+        versionLabel.setToolTipText("Program Version.");
         versionLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         versionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         versionPanel.add(versionLabel, BorderLayout.EAST);
@@ -179,7 +199,6 @@ public class ManagerMenuUI extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
     }
-
 
     public final void run() {
         initializeUI();

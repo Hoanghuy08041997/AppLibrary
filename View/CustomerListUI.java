@@ -1,6 +1,7 @@
 package View;
 
 import Model.Customer;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -32,11 +33,10 @@ public class CustomerListUI extends JPanel {
         table.getColumnModel().getColumn(4).setPreferredWidth(80);  // Birthday
         table.getColumnModel().getColumn(5).setPreferredWidth(65);  // Level
         
-        JScrollPane scrollPane = new JScrollPane(table);
-        
+        JScrollPane scrollPane = new JScrollPane(table);     
         scrollPane.setPreferredSize(new Dimension(800, 550));
         
-        add(scrollPane);
+        add(scrollPane, BorderLayout.CENTER);
     }
 }
 

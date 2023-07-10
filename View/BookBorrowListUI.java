@@ -59,6 +59,7 @@ public class BookBorrowListUI extends JPanel {
         JPanel buttonPanel = new JPanel();
 
         JButton returnButton = new JButton("Return Book");
+        returnButton.setToolTipText("Return this Book.");
         returnButton.addActionListener((ActionEvent e) -> {
             int selectedRow = bookTable.getSelectedRow();
             if (selectedRow != -1) {          

@@ -5,6 +5,8 @@ import Controller.MethodController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public final class CustomerMenuUI extends JFrame {
     private JSplitPane splitPane;
@@ -26,6 +28,12 @@ public final class CustomerMenuUI extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                MethodController.exit();
+            }
+        });
     }
 
     private void initializeUI() {
@@ -36,12 +44,12 @@ public final class CustomerMenuUI extends JFrame {
 
         JButton loginInfoButton = new JButton("Your Account");
         loginInfoButton.addActionListener((ActionEvent e) -> {
-            JPopupMenu popupMenu = new JPopupMenu();
-            
+            JPopupMenu popupMenu = new JPopupMenu();            
             JMenuItem showNameAccount = new JMenuItem("Login as: " + ManagementLibrary.logged.get(0).getName());
             showNameAccount.setEnabled(false);
             showNameAccount.addActionListener((ActionEvent event) -> {
             });
+            showNameAccount.setToolTipText("Your account logged.");
             popupMenu.add(showNameAccount);
 
             // Sự lựa chọn "Show info"
@@ -49,6 +57,7 @@ public final class CustomerMenuUI extends JFrame {
             showInfoItem.addActionListener((ActionEvent event) -> {          
                 loginInfoUI.showInfo();
             });
+            showInfoItem.setToolTipText("Show Your Account Infomation.");
             popupMenu.add(showInfoItem);
 
             // Sự lựa chọn "Log out"
@@ -57,6 +66,7 @@ public final class CustomerMenuUI extends JFrame {
                 loginInfoUI.logout();
                 JOptionPane.showMessageDialog(this, "Logged out successfully!");
             });
+            loginInfoButton.setToolTipText("Log out your Account.");
             popupMenu.add(logoutItem);
 
             popupMenu.show(loginInfoButton, 0, loginInfoButton.getHeight());
@@ -83,6 +93,7 @@ public final class CustomerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        listBooksButton.setToolTipText("List all of books in library.");
         functionPanel.add(listBooksButton);
 
         // Search book button
@@ -93,6 +104,7 @@ public final class CustomerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        searchBookButton.setToolTipText("Search Book for Lend - Return.");
         functionPanel.add(searchBookButton);
 
         // List lending books button
@@ -103,6 +115,7 @@ public final class CustomerMenuUI extends JFrame {
             contentPanel.revalidate();
             contentPanel.repaint();
         });
+        listLendingBooksButton.setToolTipText("List your lending books.");
         functionPanel.add(listLendingBooksButton);
 
         // Lend book button
@@ -110,12 +123,14 @@ public final class CustomerMenuUI extends JFrame {
         lendBookButton.addActionListener((ActionEvent e) -> {
             JOptionPane.showMessageDialog(this, "Coming soon...");
         });
+        lendBookButton.setToolTipText("Next feature will develop.");
         functionPanel.add(lendBookButton);
         // Exit button
         exitButton = new JButton("5. Exit");
         exitButton.addActionListener((ActionEvent e) -> {
             MethodController.exit();
         });
+        exitButton.setToolTipText("Exit program.");
         functionPanel.add(exitButton);
 
         splitPane.setRightComponent(new JScrollPane(contentPanel));
