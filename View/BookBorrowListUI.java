@@ -21,23 +21,21 @@ public class BookBorrowListUI extends JPanel {
 
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
-        if (ManagementLibrary.logged.get(0).getLevelUser() == 1){
+        if (1 == ManagementLibrary.logged.get(0).getLevelUser()){
             for (BookBorrow bb : books) {
-                Object[] rowData = {bb.getId(), bb.getName(), bb.getAuthor(),bb.getType(),
-                                     bb.getPrice(),bb.getDateBorrow(),bb.getStatus()};
-                tableModel.addRow(rowData);
+                if (bb.getIdCustomer() == ManagementLibrary.logged.get(0).getId()){
+                    Object[] rowData = {bb.getId(), bb.getName(), bb.getAuthor(),bb.getType(),
+                                         bb.getPrice(),bb.getDateBorrow(),bb.getStatus()};
+                    tableModel.addRow(rowData);
+                }
             }
-        }
-
-        if (ManagementLibrary.logged.get(0).getLevelUser() == 2) {
+        } else {
             for (BookBorrow b1 : books) {
                 Object[] rowData = {b1.getId(), b1.getName(), b1.getAuthor(), b1.getType(),
                                     b1.getPrice(), b1.getDateBorrow(), b1.getStatus(), b1.getIdCustomer()};
                 tableModel.addRow(rowData);
             }
         }
-
-
 
         // Tạo JTable với DefaultTableModel
         JTable bookTable = new JTable(tableModel);
