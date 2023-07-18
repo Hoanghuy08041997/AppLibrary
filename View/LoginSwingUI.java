@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 public class LoginSwingUI extends JFrame {
     private final JTextField usernameTextField;
@@ -15,6 +16,7 @@ public class LoginSwingUI extends JFrame {
     private final JButton loginButton;
     private final JButton createAccountButton;
     private final JButton exitButton;
+    private final JButton helpButton;
 
     public LoginSwingUI() {
         
@@ -49,6 +51,7 @@ public class LoginSwingUI extends JFrame {
         createAccountButton.setToolTipText("Create new Account");
         exitButton = new JButton("Exit");
         exitButton.setToolTipText("Exit program");
+        helpButton = new JButton("Help");
 
         mainPanel.add(usernameLabel);
         mainPanel.add(usernameTextField);
@@ -57,6 +60,7 @@ public class LoginSwingUI extends JFrame {
         mainPanel.add(loginButton);
         mainPanel.add(createAccountButton);
         mainPanel.add(exitButton);
+        mainPanel.add(helpButton);
 
         add(mainPanel);
 
@@ -99,11 +103,22 @@ public class LoginSwingUI extends JFrame {
                 } else JOptionPane.showMessageDialog(null, "Invalid password. Password must be at least 8 characters long and contain at least one digit, one letter, and one special character.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-
         exitButton.addActionListener((ActionEvent e) -> {
             MethodController.exit();
         });
+            
+        helpButton.addActionListener((ActionEvent e) -> {
+            JPanel help = new JPanel();
+            String message = "<html><font color='red' size='+1'>Help</font>"
+                            + "<br>Login your account to use Application."
+                            + "<br>If you are a manager and don't have an account, you should contact your HM to get one."
+                            + "<br>If you are a customer, you can either create a new account or log in."
+                            + "<br>The accounts with level 2 are managers."
+                            + "<br>New accounts are always level 1, which is for customers."
+                            + "<br>When using the app, if you're unsure about a specific feature, you can hover your mouse over it for hints.</html>";
+            JOptionPane.showMessageDialog(help, message, "Help", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
     }
 
     public static void main(String[] args) {
