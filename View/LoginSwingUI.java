@@ -109,7 +109,7 @@ public class LoginSwingUI extends JFrame {
             
         helpButton.addActionListener((ActionEvent e) -> {
             JPanel help = new JPanel();
-            String message = "<html><font color='red'>Help</font>"
+            String message = "<html><font color='red' size='+1'>Help</font>"
                             + "<br>Login your account to use Application."
                             + "<br>If you are a manager and don't have an account, you should contact your HM to get one."
                             + "<br>If you are a customer, you can either create a new account or log in."
