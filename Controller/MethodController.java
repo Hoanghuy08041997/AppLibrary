@@ -17,17 +17,16 @@ public class MethodController {
         bookBorrow.addAll(IOReader.readFileBookBorrow("/ListBookBorrow.txt"));
     }  
     public static void saveData(){
-        IOReader.saveFileAccount(ManagementLibrary.account, "ListAccounts.txt");
-        IOReader.saveFileCustomer(ManagementLibrary.customer, "ListCustomer.txt"); 
-        IOReader.saveFileBookBorrow(ManagementLibrary.bookBorrow, "ListBookBorrow.txt");
-        IOReader.saveFileBook(ManagementLibrary.book, "ListBook.txt");
-        
+        IOReader.saveFileAccount(ManagementLibrary.account, "/ListAccounts.txt");
+        IOReader.saveFileCustomer(ManagementLibrary.customer, "/ListCustomer.txt"); 
+        IOReader.saveFileBookBorrow(ManagementLibrary.bookBorrow, "/ListBookBorrow.txt");
+        IOReader.saveFileBook(ManagementLibrary.book, "/ListBook.txt");    
     }  
     public static void exit() {
-        IOReader.saveFileAccount(ManagementLibrary.account, "ListAccounts.txt");
-        IOReader.saveFileCustomer(ManagementLibrary.customer, "ListCustomer.txt");
-        IOReader.saveFileBookBorrow(ManagementLibrary.bookBorrow, "ListBookBorrow.txt");
-        IOReader.saveFileBook(ManagementLibrary.book, "ListBook.txt");
+        IOReader.saveFileAccount(ManagementLibrary.account, "./src/ListAccounts.txt");
+        IOReader.saveFileCustomer(ManagementLibrary.customer, "./src/ListCustomer.txt");
+        IOReader.saveFileBookBorrow(ManagementLibrary.bookBorrow, "./src/ListBookBorrow.txt");
+        IOReader.saveFileBook(ManagementLibrary.book, "./src/ListBook.txt");
         System.exit(0);
     }
     //Veriry!
