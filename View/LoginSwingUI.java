@@ -123,11 +123,6 @@ public class LoginSwingUI extends JFrame {
 
     public static void main(String[] args) {
         MethodController.loadData();
-        String jarPath = LoginSwingUI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        File jarFile = new File(jarPath);
-        String jarDirectory = jarFile.getParent();
-        JOptionPane.showMessageDialog(null, "Jar path: " + jarPath);
-        JOptionPane.showMessageDialog(null, "Jar Directory: " + jarDirectory);
         SwingUtilities.invokeLater(() -> {          
             LoginSwingUI loginSwingUI = new LoginSwingUI();
             loginSwingUI.setVisible(true);
