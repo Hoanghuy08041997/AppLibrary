@@ -48,13 +48,15 @@ public class SearchBookUI extends JPanel {
         JButton searchButton = new JButton("Search");
         searchButton.setToolTipText("Search for properties you want");
         searchButton.addActionListener((ActionEvent e) -> {
-            String searchCriteria = searchField.getText();
+            String searchCriteria = searchField.getText();           
             String selectedProperty = (String) searchProperties.getSelectedItem();
             if ("lend".equals(s) || "search".equals(s)){
                 List<Integer> searchResults = performSearchBook(selectedProperty, searchCriteria);
                 updateBookList(searchResults);
             }
             if ("return".equals(s)) {
+                selectedProperty = "idCustomer";
+                searchCriteria = Integer.toString(IdCustomer);
                 List<Integer> searchResults = performSearchBookBorrow(selectedProperty, searchCriteria);
                 updateBookBorrowList(searchResults);
             }
@@ -174,7 +176,7 @@ public class SearchBookUI extends JPanel {
                             data[i][1] = book.getName();     // Name
                             data[i][2] = book.getAuthor();   // Author
                             data[i][3] = book.getType();     // Type
-                            data[i][4] = book.getNumber();   // Total Book
+                            data[i][4] = book.getIdCustomer();   // Total Book
                             data[i][5] = book.getPrice();    // Price
                             data[i][6] = book.getDateBorrow(); //Date borrow                      
                             data[i][7] = book.getStatus(); //Status
